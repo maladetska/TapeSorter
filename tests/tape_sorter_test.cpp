@@ -5,23 +5,23 @@
 #include "lib/config_reader/simple_yaml_reader.hpp"
 
 TEST(TapeStructure, TestResultFile1) {
-  std::filesystem::path path = "./resources/config1.yaml";
+  const std::filesystem::path path = "./resources/config1.yaml";
 
   config_reader::SimpleYamlReader config(path);
   config.ReadConfig();
 
-  size_t size = config["N"].AsInt32();
-  size_t memory = config["M"].AsInt32();
+  const size_t size = config["N"].AsInt32();
+  const size_t memory = config["M"].AsInt32();
 
-  std::chrono::milliseconds delay_for_read =
+  const std::chrono::milliseconds delay_for_read =
       config["delay_for_read"].AsMilliseconds();
-  std::chrono::milliseconds delay_for_write =
+  const std::chrono::milliseconds delay_for_write =
       config["delay_for_write"].AsMilliseconds();
-  std::chrono::milliseconds delay_for_shift =
+  const std::chrono::milliseconds delay_for_shift =
       config["delay_for_shift"].AsMilliseconds();
 
-  std::filesystem::path path_in = config["path_in"].AsPath();
-  std::filesystem::path path_out = config["path_out"].AsPath();
+  const std::filesystem::path path_in = config["path_in"].AsPath();
+  const std::filesystem::path path_out = config["path_out"].AsPath();
 
   tape::Tape<int32_t> tape_in(path_in, size, memory, delay_for_read,
                               delay_for_write, delay_for_shift);
@@ -43,23 +43,23 @@ TEST(TapeStructure, TestResultFile1) {
 }
 
 TEST(TapeStructure, TestResultFile2) {
-  std::filesystem::path path = "./resources/config2.yaml";
+  const std::filesystem::path path = "./resources/config2.yaml";
 
   config_reader::SimpleYamlReader config(path);
   config.ReadConfig();
 
-  size_t size = config["N"].AsInt32();
-  size_t memory = config["M"].AsInt32();
+  const size_t size = config["N"].AsInt32();
+  const size_t memory = config["M"].AsInt32();
 
-  std::chrono::milliseconds delay_for_read =
+  const std::chrono::milliseconds delay_for_read =
       config["delay_for_read"].AsMilliseconds();
-  std::chrono::milliseconds delay_for_write =
+  const std::chrono::milliseconds delay_for_write =
       config["delay_for_write"].AsMilliseconds();
-  std::chrono::milliseconds delay_for_shift =
+  const std::chrono::milliseconds delay_for_shift =
       config["delay_for_shift"].AsMilliseconds();
 
-  std::filesystem::path path_in = config["path_in"].AsPath();
-  std::filesystem::path path_out = config["path_out"].AsPath();
+  const std::filesystem::path path_in = config["path_in"].AsPath();
+  const std::filesystem::path path_out = config["path_out"].AsPath();
 
   tape::Tape<int32_t> tape_in(path_in, size, memory, delay_for_read,
                               delay_for_write, delay_for_shift);
@@ -81,23 +81,23 @@ TEST(TapeStructure, TestResultFile2) {
 }
 
 TEST(TapeStructure, TestResultFile3) {
-  std::filesystem::path path = "./resources/config3.yaml";
+  const std::filesystem::path path = "./resources/config3.yaml";
 
   config_reader::SimpleYamlReader config(path);
   config.ReadConfig();
 
-  size_t size = config["N"].AsInt32();
-  size_t memory = config["M"].AsInt32();
+  const size_t size = config["N"].AsInt32();
+  const size_t memory = config["M"].AsInt32();
 
-  std::chrono::milliseconds delay_for_read =
+  const std::chrono::milliseconds delay_for_read =
       config["delay_for_read"].AsMilliseconds();
-  std::chrono::milliseconds delay_for_write =
+  const std::chrono::milliseconds delay_for_write =
       config["delay_for_write"].AsMilliseconds();
-  std::chrono::milliseconds delay_for_shift =
+  const std::chrono::milliseconds delay_for_shift =
       config["delay_for_shift"].AsMilliseconds();
 
-  std::filesystem::path path_in = config["path_in"].AsPath();
-  std::filesystem::path path_out = config["path_out"].AsPath();
+  const std::filesystem::path path_in = config["path_in"].AsPath();
+  const std::filesystem::path path_out = config["path_out"].AsPath();
 
   tape::Tape<int32_t> tape_in(path_in, size, memory, delay_for_read,
                               delay_for_write, delay_for_shift);
