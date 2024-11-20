@@ -16,12 +16,17 @@ add_executable(
         tape_sorter_test.cpp
 )
 
+
+#target_link_libraries(${PROJECT_NAME} SimpleConfigReaderLib TapeLib)
+
 target_link_libraries(
         tape_sorter_tests
-        TapeConfigReaderLib
-        TapeStructureLib
+        SimpleConfigReaderLib
+        TapeLib
         GTest::gtest_main
 )
+
+#target_include_directories(${PROJECT_NAME} PUBLIC ..)
 
 target_include_directories(tape_sorter_tests PUBLIC ${PROJECT_SOURCE_DIR})
 
