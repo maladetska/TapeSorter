@@ -99,8 +99,8 @@ void TapeSorter<TapeType>::MakeSplitTape(std::filesystem::path &path,
   std::vector<TapeType> buffer = tape_in_.GetChunkElements();
   std::sort(buffer.begin(), buffer.end());
 
-  for (TapeType &number : buffer) {
-    stream_to << number << ' ';
+  for (TapeType &element : buffer) {
+    stream_to << element << ' ';
   }
 
   stream_to.close();
@@ -165,8 +165,8 @@ std::pair<bool, bool> TapeSorter<TapeType>::MergeOneChunk(
     }
   }
 
-  for (TapeType &number : buffer) {
-    tape_result.Put(number);
+  for (TapeType &element : buffer) {
+    tape_result.Put(element);
     tape_result.MoveLeft();
   }
 
