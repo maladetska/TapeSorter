@@ -6,41 +6,130 @@
 
 namespace tape {
 
+////////////////////////////////////////////////////////////////////////////////
+/// \brief A class for sorting the tape.
+/// \tparam TapeType
+////////////////////////////////////////////////////////////////////////////////
 template <typename TapeType>
 class TapeSorter {
  public:
+  //////////////////////////////////////////////////////////////////////////////
+  /// \brief TapeSorter default constructor.
+  //////////////////////////////////////////////////////////////////////////////
   TapeSorter() = default;
 
+  //////////////////////////////////////////////////////////////////////////////
+  /// \brief TapeSorter constructor.
+  ///
+  /// \param tape_in tape that needs to be sorted.
+  /// \param tape_out tape in which the sorted tape will be recorded.
+  //////////////////////////////////////////////////////////////////////////////
   TapeSorter(Tape<TapeType> &tape_in, Tape<TapeType> &tape_out);
 
+  //////////////////////////////////////////////////////////////////////////////
+  /// \brief TapeSorter destractor.
+  //////////////////////////////////////////////////////////////////////////////
   ~TapeSorter() = default;
 
+  //////////////////////////////////////////////////////////////////////////////
+  /// \brief Launch sorting the tape.
+  //////////////////////////////////////////////////////////////////////////////
   void Sort();
 
  private:
+  //////////////////////////////////////////////////////////////////////////////
+  /// \brief Launch splitting tapes into array of tapes.
+  ///
+  /// \param path file path where the tapes should be stored.
+  /// \param tapes split tapes.
+  //////////////////////////////////////////////////////////////////////////////
   void Split(std::filesystem::path &path, std::vector<Tape<TapeType>> &tapes);
+
+  //////////////////////////////////////////////////////////////////////////////
+  /// \brief Create a new split tape.
+  ///
+  /// \param path path to the file where new tape will be located.
+  /// \param tape new tape.
+  /// \param tape_number number of new tape.
+  //////////////////////////////////////////////////////////////////////////////
   void MakeSplitTape(std::filesystem::path &path, Tape<TapeType> &tape,
                      ChunksNumber tape_number);
 
+  //////////////////////////////////////////////////////////////////////////////
+  /// \brief Starting of the assembly of split tapes together.
+  ///
+  /// \param dir
+  /// \param tapes split tapes
+  //////////////////////////////////////////////////////////////////////////////
   void Assembly(ChunksNumber dir, std::vector<Tape<TapeType>> &tapes);
 
+  //////////////////////////////////////////////////////////////////////////////
+  /// \brief Merge two sorted tapes into one sorted tape.
+  ///
+  /// \param path path to the file of new tape file to which the result is
+  /// written.
+  /// \param tape0 first sorted tape.
+  /// \param tape1 second sorted tape.
+  /// \return sorted tape consisting of two introductory tapes.
+  //////////////////////////////////////////////////////////////////////////////
   static Tape<TapeType> Merge(std::filesystem::path path, Tape<TapeType> &tape0,
                               Tape<TapeType> &tape1);
 
+  //////////////////////////////////////////////////////////////////////////////
+  /// \brief Create new sorted chunk from two tapes by merging.
+  ///
+  /// \param tape_result writing a new chunk to this tape.
+  /// \param tape0 first sorted resource tape.
+  /// \param tape1 second sorted resource tape.
+  /// \param end0 true if the position on the tape0 is the rightmost and the
+  /// tape1 is passed to the end.
+  /// \param end1 true if the position on the tape1 is the rightmost and the
+  /// tape2 is passed to the end.
+  /// \param size size of new chunk.
+  /// \return new value of end1 and end2 params.
+  //////////////////////////////////////////////////////////////////////////////
   static std::pair<bool, bool> MergeOneChunk(Tape<TapeType> &tape_result,
                                              Tape<TapeType> &tape0,
                                              Tape<TapeType> &tape1, bool end0,
                                              bool end1, ChunkSize size);
 
+  //////////////////////////////////////////////////////////////////////////////
+  /// \brief Put the remaining numbers of the tape in the buffer.
+  ///
+  /// \param tape tape from which the current number is taken.
+  /// \param buffer buffer of numbers.
+  /// \param size size that the buffer should have.
+  //////////////////////////////////////////////////////////////////////////////
   static void PutTapeRestToBuffer(Tape<TapeType> &tape,
                                   std::vector<TapeType> &buffer,
                                   ChunkSize size);
+
+  //////////////////////////////////////////////////////////////////////////////
+  /// \brief Put the current element from the tape (indicated by the magnetic
+  /// head) in the buffer.
+  ///
+  /// \param tape tape from which the current number is taken.
+  /// \param buffer buffer of numbers.
+  /// \param end true if the magnetic head points to the rightmost position of
+  /// the tape else false.
+  /// \return true if the magnetic head points to the rightmost position of the
+  /// tape else false.
+  //////////////////////////////////////////////////////////////////////////////
   bool static PutElementInBuffer(Tape<TapeType> &tape,
                                  std::vector<TapeType> &buffer, bool &end);
 
+  //////////////////////////////////////////////////////////////////////////////
+  /// \brief Tape that needs to be sorted.
+  //////////////////////////////////////////////////////////////////////////////
   Tape<TapeType> tape_in_;
+  //////////////////////////////////////////////////////////////////////////////
+  /// \brief Tape in which the sorted tape will be recorded.
+  //////////////////////////////////////////////////////////////////////////////
   Tape<TapeType> tape_out_;
 
+  //////////////////////////////////////////////////////////////////////////////
+  /// \brief Directory for storing temporary tapes.
+  //////////////////////////////////////////////////////////////////////////////
   const std::filesystem::path dir_for_tmp_tapes_ = "./tmp";
 };
 
