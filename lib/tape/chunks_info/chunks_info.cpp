@@ -2,10 +2,10 @@
 
 namespace tape {
 ChunksInfo::ChunksInfo(ChunkSize chunk_size, TapeSize tape_size) {
-  max_size_chunk_ = chunk_size;
-  chunks_number_ = (tape_size - 1) / max_size_chunk_ + 1;
-  last_size_chunk_ = tape_size % max_size_chunk_ == 0
-                         ? max_size_chunk_
-                         : tape_size % max_size_chunk_;
+  max_chunk_size_ = chunk_size;
+  chunks_number_ = (tape_size - 1) / max_chunk_size_ + 1;
+  last_chunk_size_ = tape_size % max_chunk_size_ == 0
+                         ? max_chunk_size_
+                         : tape_size % max_chunk_size_;
 }
 }  // namespace tape

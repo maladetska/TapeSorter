@@ -9,7 +9,7 @@ struct ChunksInfo {
   ChunksInfo(ChunkSize chunk_size, TapeSize tape_size);
 
   ChunksNumber chunks_number_{};
-  ChunkSize max_size_chunk_{};
-  ChunkSize last_size_chunk_{};
+  ChunkSize max_chunk_size_{};
+  ChunkSize last_chunk_size_{};
 };
 }  // namespace tape
