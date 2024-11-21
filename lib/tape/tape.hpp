@@ -16,7 +16,7 @@ using MemorySize = uint32_t;
 /// stationary. By default, the numbering of the tape elements starts on the
 /// left. Tape consists of chunks for the implementation of which there is a
 /// class Chunk.
-/// \tparam TapeType
+/// \tparam TapeType type of elements in the Tape.
 ////////////////////////////////////////////////////////////////////////////////
 template <typename TapeType>
 class Tape : public ITape<TapeType> {
