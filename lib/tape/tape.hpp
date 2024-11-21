@@ -11,9 +11,6 @@ namespace tape {
 using TapeSize = uint32_t;
 using MemorySize = uint32_t;
 
-////////////////////////////////////////////////////////////////////////////////
-/// \brief Tape Interface.
-////////////////////////////////////////////////////////////////////////////////
 template <typename TapeType>
 class Tape : public ITape<TapeType> {
  public:
@@ -84,9 +81,8 @@ class Tape : public ITape<TapeType> {
   std::fstream stream_from_;
   std::filesystem::path tape_location_{};
 
-  // N, размер в байтах всей ленты: kN, где k -- размер одного эл-та
   TapeSize size_{};
-  MemorySize memory_size_{};  // кол-во элементов на одной tmp ленте: m_ / k
+  MemorySize memory_size_{};
 
   Delays delays_{};
 
