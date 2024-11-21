@@ -1,40 +1,37 @@
 #include <iostream>
 
 #include "lib/config_reader/simple_yaml_reader.hpp"
-#include "lib/sorter/tape_sorter.hpp"
+#include "lib/tape/sorter/tape_sorter.hpp"
 
 using namespace std::chrono_literals;
 
 int main(int argc, char *argv[]) {
-    std::filesystem::path path = argv[1];
+  std::filesystem::path path = argv[1];
 
-    config_reader::SimpleYamlReader config(path);
-    config.ReadConfig();
+  config_reader::SimpleYamlReader config(path);
+  config.ReadConfig();
 
-    size_t size = config["N"].AsInt32();
-    size_t memory = config["M"].AsInt32();
+  const uint32_t size = config["N"].AsInt32();
+  const uint32_t memory = config["M"].AsInt32();
 
-    std::chrono::milliseconds delay_for_read = config["delay_for_read"].AsMilliseconds();
-    std::chrono::milliseconds delay_for_put = config["delay_for_put"].AsMilliseconds();
-    std::chrono::milliseconds delay_for_shift = config["delay_for_shift"].AsMilliseconds();
+  const std::chrono::milliseconds delay_for_read =
+      config["delay_for_read"].AsMilliseconds();
+  const std::chrono::milliseconds delay_for_write =
+      config["delay_for_write"].AsMilliseconds();
+  const std::chrono::milliseconds delay_for_shift =
+      config["delay_for_shift"].AsMilliseconds();
 
-    std::filesystem::path path_in = config["path_in"].AsPath();
-    std::filesystem::path path_out = config["path_out"].AsPath();
+  const std::filesystem::path path_in = config["path_iån"].AsPath();
+  const std::filesystem::path path_out = config["path_out"].AsPath();
 
-    tape_structure::Tape tape_in(
-            path_in,
-            size,
-            tape_structure::Tape::CountChunkSize(memory, size),
-            delay_for_read,
-            delay_for_put,
-            delay_for_shift);
-    tape_structure::Tape tape_out(path_out,
-                                  delay_for_read,
-                                  delay_for_put,
-                                  delay_for_shift);
-    tape_structure::TapeSorter sorter(tape_in, tape_out);
+  tape::Tape<int32_t> tape_in{
+      path_in, size, memory, delay_for_read, delay_for_write, delay_for_shift};
+  tape::Tape<int32_t> tape_out{path_out, delay_for_read, delay_for_write,
+                               delay_for_shift};
 
-    sorter.Sort();
+  tape::TapeSorter sorter{tape_in, tape_out};
 
-    return 0;
+  sorter.Sort();
+
+  return 0;
 }

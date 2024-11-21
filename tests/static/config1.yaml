@@ -1,7 +1,7 @@
 N: 20
 M: 65
 delay_for_read: 0
-delay_for_put: 0
+delay_for_write: 0
 delay_for_shift: 0
 path_in: ./resources/input1.in
 path_out: ./utests/output1.out
