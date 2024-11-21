@@ -204,7 +204,7 @@ void Chunk<TapeType>::ReadNewChunk(std::fstream& from,
   elements_.resize(size_);
   for (TapeType& elem : elements_) {
     std::this_thread::sleep_for(delays_.delay_for_shift_);
-    std::this_thread::sleep_for(delays_.delay_for_read_);
+    std::this_thread::sleep_for(delays_.delay_for_reading_);
     from >> elem;
   }
 }
@@ -212,7 +212,7 @@ void Chunk<TapeType>::ReadNewChunk(std::fstream& from,
 template <typename TapeType>
 void Chunk<TapeType>::PutElementInArrayByPos(const TapeType& elem,
                                              ChunkSize pos) {
-  std::this_thread::sleep_for(delays_.delay_for_write_);
+  std::this_thread::sleep_for(delays_.delay_for_writing_);
   elements_[pos] = elem;
 }
 
@@ -243,7 +243,7 @@ ChunksNumber Chunk<TapeType>::GetChunkNumber() const {
 
 template <typename TapeType>
 TapeType Chunk<TapeType>::GetCurrentElement() const {
-  std::this_thread::sleep_for(delays_.delay_for_read_);
+  std::this_thread::sleep_for(delays_.delay_for_reading_);
   return elements_[pos_];
 }
 
