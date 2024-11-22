@@ -1,7 +1,0 @@
-N: 3
-M: 10
-delay_for_read: 0
-delay_for_write: 0
-delay_for_shift: 0
-path_in: ./resources/input4.in
-path_out: ./utests/output4.out
