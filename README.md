@@ -16,11 +16,23 @@ path_out = <PATH_TO_OUTPUT_TAPE>
 
 Commands:
 ```
-$ git clone 'https://github.com/maladetska/TapeStructure'
-$ cd TapeStructure
-$ cmake CMakeLists.txt
-$ make
-$ ./bin/TapeStructure <CONFIG_DIR>/config.yaml
+$ git clone 'https://github.com/maladetska/TapeSorter'
+$ cd TapeSorter
+$ ./launch.sh <CONFIG_DIR>/config.yaml
+```
+
+Для отдельного запуска ТЕСТОВ (из ./TapeSorter):
+```
+$ ./launch_tests.sh
+```
+
+Для запуска примера (из ./TapeSorter):
+```
+$ ./launch_example.sh
+```
+или
+```
+$ ./launch.sh ../example/config3.yaml
 ```
 
 
