@@ -140,6 +140,9 @@ TapeSorter<TapeType>::TapeSorter(Tape<TapeType> &tape_in,
 
 template <typename TapeType>
 void TapeSorter<TapeType>::Sort() {
+  if (!tape_in_.GetSize()) {
+    return;
+  }
   std::filesystem::create_directories(dir_for_tmp_tapes_);
   std::filesystem::path tmp_path(dir_for_tmp_tapes_);
   ChunksNumber chunks_number = tape_in_.GetChunksNumber();

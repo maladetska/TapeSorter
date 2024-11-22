@@ -41,6 +41,43 @@ TEST(TapeStructure, EmptyTapeTest) {
   EXPECT_EQ(result, kExpected);
 }
 
+TEST(TapeStructure, OneElementTapeTest) {
+  const std::filesystem::path path = "./resources/config4.yaml";
+
+  config_reader::SimpleYamlReader config(path);
+  config.ReadConfig();
+
+  const size_t size = config["N"].AsInt32();
+  const size_t memory = config["M"].AsInt32();
+
+  const std::chrono::milliseconds delay_for_read =
+      config["delay_for_read"].AsMilliseconds();
+  const std::chrono::milliseconds delay_for_write =
+      config["delay_for_write"].AsMilliseconds();
+  const std::chrono::milliseconds delay_for_shift =
+      config["delay_for_shift"].AsMilliseconds();
+
+  const std::filesystem::path path_in = config["path_in"].AsPath();
+  const std::filesystem::path path_out = config["path_out"].AsPath();
+
+  tape::Tape<int32_t> tape_in(path_in, size, memory, delay_for_read,
+                              delay_for_write, delay_for_shift);
+  tape::Tape<int32_t> tape_out(path_out, delay_for_read, delay_for_write,
+                               delay_for_shift);
+
+  tape::TapeSorter sorter(tape_in, tape_out);
+
+  sorter.Sort();
+
+  std::ifstream fin(path_out);
+
+  std::string result;
+  std::getline(fin, result);
+
+  const std::string kExpected = "14524647 ";
+  EXPECT_EQ(result, kExpected);
+}
+
 TEST(TapeStructure, TestFile1) {
   const std::filesystem::path path = "./resources/config1.yaml";
 
