@@ -1,9 +1,7 @@
 #!/bin/bash
 
-CONFIG_FILE=$1
-
 mkdir build
 cd build
 cmake ../
 make
-./bin/TapeSorter $CONFIG_FILE
+./bin/TapeSorter ../example/config3.yaml

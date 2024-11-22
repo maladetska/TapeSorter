@@ -1,0 +1,7 @@
+N: 26
+M: 60
+delay_for_read: 0
+delay_for_write: 0
+delay_for_shift: 0
+path_in: ../example/input3.in
+path_out: ../example/output3.out

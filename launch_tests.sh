@@ -1,9 +1,8 @@
 #!/bin/bash
 
-CONFIG_FILE=$1
-
 mkdir build
 cd build
 cmake ../
 make
-./bin/TapeSorter $CONFIG_FILE
+cd ./tests
+./tape_sorter_tests

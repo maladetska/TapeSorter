@@ -21,7 +21,7 @@ int main(int argc, char *argv[]) {
   const std::chrono::milliseconds delay_for_shift =
       config["delay_for_shift"].AsMilliseconds();
 
-  const std::filesystem::path path_in = config["path_iån"].AsPath();
+  const std::filesystem::path path_in = config["path_in"].AsPath();
   const std::filesystem::path path_out = config["path_out"].AsPath();
 
   tape::Tape<int32_t> tape_in{

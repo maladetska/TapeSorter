@@ -100,9 +100,9 @@ TEST(TapeStructure, TestFile2) {
 
   tape::Tape<int32_t> tape_in(path_in, size, memory, delay_for_read,
                               delay_for_write, delay_for_shift);
-
   tape::Tape<int32_t> tape_out(path_out, delay_for_read, delay_for_write,
                                delay_for_shift);
+
   tape::TapeSorter sorter(tape_in, tape_out);
 
   sorter.Sort();
@@ -138,9 +138,9 @@ TEST(TapeStructure, TestFile3) {
 
   tape::Tape<int32_t> tape_in(path_in, size, memory, delay_for_read,
                               delay_for_write, delay_for_shift);
-
   tape::Tape<int32_t> tape_out(path_out, delay_for_read, delay_for_write,
                                delay_for_shift);
+
   tape::TapeSorter sorter(tape_in, tape_out);
 
   sorter.Sort();
