@@ -11,23 +11,31 @@ namespace tape {
 using TapeSize = uint32_t;
 using MemorySize = uint32_t;
 
+////////////////////////////////////////////////////////////////////////////////
+/// \brief Tape can move to the right or to the left while the magnetic head is
+/// stationary. By default, the numbering of the tape elements starts on the
+/// left. Tape consists of chunks for the implementation of which there is a
+/// class Chunk.
+/// \tparam TapeType type of elements in the Tape.
+////////////////////////////////////////////////////////////////////////////////
 template <typename TapeType>
 class Tape : public ITape<TapeType> {
  public:
+  //////////////////////////////////////////////////////////////////////////////
+  /// \brief Tape default constructor.
+  //////////////////////////////////////////////////////////////////////////////
   Tape() = default;
 
   Tape(const std::filesystem::path &file, TapeSize size, MemorySize memory_size,
        const Delays &delays);
-
   Tape(const std::filesystem::path &file, TapeSize size, MemorySize memory_size,
-       const std::chrono::milliseconds &delay_for_read,
+       const std::chrono::milliseconds &delay_for_reading,
        const std::chrono::milliseconds &delay_for_write,
        const std::chrono::milliseconds &delay_for_shift);
   Tape(const std::filesystem::path &file,
-       const std::chrono::milliseconds &delay_for_read,
-       const std::chrono::milliseconds &delay_for_write,
+       const std::chrono::milliseconds &delay_for_reading,
+       const std::chrono::milliseconds &delay_for_writing,
        const std::chrono::milliseconds &delay_for_shift);
-
   Tape(const Delays &delays);
 
   Tape(const Tape &);
@@ -37,22 +45,96 @@ class Tape : public ITape<TapeType> {
   Tape(Tape &&) noexcept;
   Tape &operator=(Tape &&) noexcept;
 
+  //////////////////////////////////////////////////////////////////////////////
+  /// \brief Tape desctructor.
+  //////////////////////////////////////////////////////////////////////////////
   ~Tape();
 
+  //////////////////////////////////////////////////////////////////////////////
+  /// \brief Read and get the element from cell indicated by the magnetic head.
+  ///
+  /// \return element indicated by the magnetic head
+  //////////////////////////////////////////////////////////////////////////////
   [[nodiscard]] TapeType ReadCell() override;
-  void WriteToCell(const TapeType &) override;
 
+  //////////////////////////////////////////////////////////////////////////////
+  /// \brief Put a new element to the current cell of the tape.
+  ///
+  /// \param element new element.
+  //////////////////////////////////////////////////////////////////////////////
+  void WriteToCell(const TapeType &element) override;
+
+  //////////////////////////////////////////////////////////////////////////////
+  /// \brief Move the tape under the magnetic head to the right. After
+  /// execution, the tape element will be one position to the left under the
+  /// magnetic head.
+  ///
+  /// \return true if the move succeeded else false.
+  //////////////////////////////////////////////////////////////////////////////
   bool MoveRight() override;
+
+  //////////////////////////////////////////////////////////////////////////////
+  /// \brief Move the tape under the magnetic head to the left. After execution,
+  /// the tape element will be one position to the right under the magnetic
+  /// head.
+  ///
+  /// \return true if the move succeeded else false.
+  //////////////////////////////////////////////////////////////////////////////
   bool MoveLeft() override;
 
+  //////////////////////////////////////////////////////////////////////////////
+  /// \brief Get the path to the file where the tape is located.
+  ///
+  /// \return path to the file where the tape is located.
+  //////////////////////////////////////////////////////////////////////////////
   [[nodiscard]] std::filesystem::path GetTapeFilePath() const;
+
+  //////////////////////////////////////////////////////////////////////////////
+  /// \brief Get the size of tape.
+  ///
+  /// \return size of tape.
+  //////////////////////////////////////////////////////////////////////////////
   [[nodiscard]] TapeSize GetSize() const;
+
+  //////////////////////////////////////////////////////////////////////////////
+  /// \brief Get internal memory size (RAM).
+  ///
+  /// \return internal memory size (RAM).
+  //////////////////////////////////////////////////////////////////////////////
   [[nodiscard]] TapeSize GetMemorySize() const;
+
+  //////////////////////////////////////////////////////////////////////////////
+  /// \brief Get the number of chunks.
+  ///
+  /// \return number of chunks.
+  //////////////////////////////////////////////////////////////////////////////
   [[nodiscard]] TapeSize GetChunksNumber() const;
+
+  //////////////////////////////////////////////////////////////////////////////
+  /// \brief Get the size of all chunks except the size of the last chunk if it
+  /// is smaller than the rest.
+  ///
+  /// \return max size of chunks.
+  //////////////////////////////////////////////////////////////////////////////
   [[nodiscard]] ChunkSize GetMaxChunkSize() const;
+
+  //////////////////////////////////////////////////////////////////////////////
+  /// \brief Get the size of the last chunk.
+  ///
+  /// \return min size of chunks.
+  //////////////////////////////////////////////////////////////////////////////
   [[nodiscard]] ChunkSize GetMinChunkSize() const;
+
+  //////////////////////////////////////////////////////////////////////////////
+  /// \brief  Get elements of chunks in the tape.
+  ///
+  /// \return elements of chunks.
+  //////////////////////////////////////////////////////////////////////////////
   [[nodiscard]] std::vector<TapeType> GetChunkElements() const;
 
+  //////////////////////////////////////////////////////////////////////////////
+  /// \brief Clear current chunk.
+  //////////////////////////////////////////////////////////////////////////////
   void ClearChunkInTape();
 
   template <typename T>
@@ -62,37 +144,113 @@ class Tape : public ITape<TapeType> {
   Tape(const std::filesystem::path &file, TapeSize size,
        ChunkSize max_chunk_size);
 
+  //////////////////////////////////////////////////////////////////////////////
+  /// \brief Initializing the first chunk.
+  ///
+  /// \return false if initialization happened earlier and true if
+  /// initialization did not happen before and it is now completed.
+  //////////////////////////////////////////////////////////////////////////////
   bool InitFirstChunk();
 
+  //////////////////////////////////////////////////////////////////////////////
+  /// \brief Read the chunk to the right of the current one.
+  //////////////////////////////////////////////////////////////////////////////
   void ReadChunkToTheRight();
+
+  //////////////////////////////////////////////////////////////////////////////
+  /// \brief Read the chunk to the left of the current one.
+  //////////////////////////////////////////////////////////////////////////////
   void ReadChunkToTheLeft();
 
+  //////////////////////////////////////////////////////////////////////////////
+  /// \brief Rewrite tape from one file to another.
+  ///
+  /// \param from file stream from where the tape is being read.
+  /// \param to file stream where the tape is recorded.
+  //////////////////////////////////////////////////////////////////////////////
   static void RewriteFromTo(std::fstream &from, std::fstream &to);
 
+  //////////////////////////////////////////////////////////////////////////////
+  /// \brief Put a new element in the current chunk.
+  ///
+  /// \param to file stream where the chunk with the new element will be placed.
+  /// \param size size for the new chunk.
+  /// \param pos position to put the new element on.
+  /// \param element element to put.
+  //////////////////////////////////////////////////////////////////////////////
   void PutElementInNewChunk(std::fstream &to, ChunkSize size, ChunkSize pos,
                             TapeType element);
 
+  //////////////////////////////////////////////////////////////////////////////
+  /// \brief Read and write new chunk.
+  ///
+  /// \param from file stream from where the chunk is read.
+  /// \param to file stream where the chunk is written.
+  /// \param new_chunk_number number of new chunk.
+  /// \param new_size size of new chunk.
+  //////////////////////////////////////////////////////////////////////////////
   void ReadAndWriteNewChunk(std::fstream &from, std::fstream &to,
                             ChunksNumber new_chunk_number, ChunkSize new_size);
 
+  //////////////////////////////////////////////////////////////////////////////
+  /// \brief Calculate one chunk size.
+  ///
+  /// \param memory RAM memory.
+  /// \param size size of the tape -- number of tape cells.
+  /// \return size of one chunk.
+  //////////////////////////////////////////////////////////////////////////////
   [[nodiscard]] static ChunkSize CalculateChunkSize(MemorySize memory,
                                                     TapeSize size);
 
+  //////////////////////////////////////////////////////////////////////////////
+  /// \brief File stream from where the tape is read.
+  //////////////////////////////////////////////////////////////////////////////
   std::fstream stream_from_;
+
+  //////////////////////////////////////////////////////////////////////////////
+  /// \brief Path to the file where the tape is located.
+  //////////////////////////////////////////////////////////////////////////////
   std::filesystem::path tape_location_{};
 
+  //////////////////////////////////////////////////////////////////////////////
+  /// \brief Number of elements of the tape.
+  //////////////////////////////////////////////////////////////////////////////
   TapeSize size_{};
+
+  //////////////////////////////////////////////////////////////////////////////
+  /// \brief
+  //////////////////////////////////////////////////////////////////////////////
   MemorySize memory_size_{};
 
+  //////////////////////////////////////////////////////////////////////////////
+  /// \brief Delays in reading, putting and shifting.
+  //////////////////////////////////////////////////////////////////////////////
   Delays delays_{};
 
+  //////////////////////////////////////////////////////////////////////////////
+  /// \brief Information about chunks.
+  //////////////////////////////////////////////////////////////////////////////
   ChunksInfo chunks_info_;
 
+  //////////////////////////////////////////////////////////////////////////////
+  /// \brief The current chunk.
+  //////////////////////////////////////////////////////////////////////////////
   Chunk<TapeType> current_chunk_{};
 
+  //////////////////////////////////////////////////////////////////////////////
+  /// \brief Tape initialization flag. If the first chunk was not initialized
+  /// then the variable is true else false.
+  //////////////////////////////////////////////////////////////////////////////
   bool unused_ = true;
 
+  //////////////////////////////////////////////////////////////////////////////
+  /// \brief
+  //////////////////////////////////////////////////////////////////////////////
   static const MemorySize kDivider = 16;
+
+  //////////////////////////////////////////////////////////////////////////////
+  /// \brief
+  //////////////////////////////////////////////////////////////////////////////
   const std::filesystem::path kDirForTempTapes_ = "./kDirForTempTapes_/";
 };
 
@@ -111,19 +269,19 @@ Tape<TapeType>::Tape(const std::filesystem::path &file, TapeSize size,
 template <typename TapeType>
 Tape<TapeType>::Tape(const std::filesystem::path &file, TapeSize size,
                      MemorySize memory_size,
-                     const std::chrono::milliseconds &delay_for_read,
-                     const std::chrono::milliseconds &delay_for_write,
+                     const std::chrono::milliseconds &delay_for_reading,
+                     const std::chrono::milliseconds &delay_for_writing,
                      const std::chrono::milliseconds &delay_for_shift)
     : Tape(file, size, memory_size,
-           Delays(delay_for_read, delay_for_write, delay_for_shift)) {}
+           Delays(delay_for_reading, delay_for_writing, delay_for_shift)) {}
 
 template <typename TapeType>
 Tape<TapeType>::Tape(const std::filesystem::path &file,
-                     const std::chrono::milliseconds &delay_for_read,
-                     const std::chrono::milliseconds &delay_for_write,
+                     const std::chrono::milliseconds &delay_for_reading,
+                     const std::chrono::milliseconds &delay_for_writing,
                      const std::chrono::milliseconds &delay_for_shift)
     : tape_location_(file),
-      delays_(delay_for_read, delay_for_write, delay_for_shift) {
+      delays_(delay_for_reading, delay_for_writing, delay_for_shift) {
   stream_from_.open(tape_location_);
 }
 

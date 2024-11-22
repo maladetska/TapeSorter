@@ -12,22 +12,27 @@ struct Delays {
   /// \brief Delays defult constructor.
   //////////////////////////////////////////////////////////////////////////////
   Delays() = default;
+
   //////////////////////////////////////////////////////////////////////////////
   /// \brief Delays constructor by delays for read write and shift.
+  ///
+  /// \param delay_for_reading
+  /// \param delay_for_writing
+  /// \param delay_for_shift
   //////////////////////////////////////////////////////////////////////////////
-  Delays(std::chrono::milliseconds delay_for_read,
-         std::chrono::milliseconds delay_for_write,
+  Delays(std::chrono::milliseconds delay_for_reading,
+         std::chrono::milliseconds delay_for_writing,
          std::chrono::milliseconds delay_for_shift);
 
   //////////////////////////////////////////////////////////////////////////////
-  /// \brief Delay in reading the number indicated by the magnetic head.
+  /// \brief Delay in reading the element indicated by the magnetic head.
   //////////////////////////////////////////////////////////////////////////////
-  std::chrono::milliseconds delay_for_read_{};
+  std::chrono::milliseconds delay_for_reading_{};
   //////////////////////////////////////////////////////////////////////////////
-  /// \brief Delay in putting the number to the position indicated by the
+  /// \brief Delay in putting the element to the position indicated by the
   /// magnetic head.
   //////////////////////////////////////////////////////////////////////////////
-  std::chrono::milliseconds delay_for_write_{};
+  std::chrono::milliseconds delay_for_writing_{};
   //////////////////////////////////////////////////////////////////////////////
   /// \brief Delay for moving the tape by one position.
   //////////////////////////////////////////////////////////////////////////////

@@ -1,4 +1,3 @@
 #!/bin/bash
 
-doxygen -g
-doxygen
+doxygen Doxygen
